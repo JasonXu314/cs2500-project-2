@@ -45,7 +45,7 @@ void Sorter<T>::mergeInsertionSort(T* arr, int size) {
 		return;
 	}
 
-	if (size <= 10) {
+	if (size <= 320) {
 		insertionSort(arr, size);
 		return;
 	}

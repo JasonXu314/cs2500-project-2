@@ -20,7 +20,7 @@ int main() {
 	cout << "Random Order:" << endl;
 
 	for (int i = 0; i < NUM_SIZES; i++) {
-		cout << SIZES[i] << " elements:" << endl;
+		cout << SIZES[i] << " elements: ";
 
 		double trials[5] = {0};
 
@@ -40,19 +40,18 @@ int main() {
 			double end = duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
 
 			double elapsed = end - start;
-			cout << elapsed << "ns\t";
 			trials[trial] = elapsed;
 
 			delete[] arr;
 		}
 
-		cout << endl << "Average: " << averageTimes(trials, 5) << "ns" << endl << endl;
+		cout << averageTimes(trials, 5) << "ns" << endl;
 	}
 
-	cout << "Reverse Order:" << endl;
+	cout << endl << "Reverse Order:" << endl;
 
 	for (int i = 0; i < NUM_SIZES; i++) {
-		cout << SIZES[i] << " elements:" << endl;
+		cout << SIZES[i] << " elements: ";
 
 		double trials[5] = {0};
 
@@ -70,19 +69,18 @@ int main() {
 			double end = duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
 
 			double elapsed = end - start;
-			cout << elapsed << "ns\t";
 			trials[trial] = elapsed;
 
 			delete[] arr;
 		}
 
-		cout << endl << "Average: " << averageTimes(trials, 5) << "ns" << endl << endl;
+		cout << averageTimes(trials, 5) << "ns" << endl;
 	}
 
-	cout << "Almost Sorted:" << endl;
+	cout << endl << "Almost Sorted:" << endl;
 
 	for (int i = 0; i < NUM_SIZES; i++) {
-		cout << SIZES[i] << " elements:" << endl;
+		cout << SIZES[i] << " elements: ";
 
 		double trials[5] = {0};
 
@@ -105,13 +103,12 @@ int main() {
 			double end = duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
 
 			double elapsed = end - start;
-			cout << elapsed << "ns\t";
 			trials[trial] = elapsed;
 
 			delete[] arr;
 		}
 
-		cout << endl << "Average: " << averageTimes(trials, 5) << "ns" << endl << endl;
+		cout << averageTimes(trials, 5) << "ns" << endl;
 	}
 
 	return 0;
