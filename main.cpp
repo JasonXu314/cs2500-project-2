@@ -5,6 +5,7 @@
 #include <iostream>
 #include <random>
 
+#include "Benchmarker.h"
 #include "Sorter.h"
 #include "utils.h"
 
@@ -13,102 +14,44 @@ using namespace chrono;
 
 int main() {
 	Sorter<int> sorter;
-	default_random_engine rand(time(nullptr));
+	Benchmarker<int> benchmarker([](int* arr, int size) {
+		for (int i = 0; i < size; i++) {
+			arr[i] = i;
+		}
+	});
 
 	cout << scientific;
 
-	cout << "Random Order:" << endl;
+	cout << "Random Order:" << endl << "Size\t\tMerge Sort\t\tQuick Sort\t\tHeap Sort\t\tMerge-Insertion Sort" << endl;
 
 	for (int i = 0; i < NUM_SIZES; i++) {
-		cout << SIZES[i] << " elements: ";
-
-		double trials[5] = {0};
-
-		for (int trial = 0; trial < 5; trial++) {
-			int* arr = new int[SIZES[i]];
-
-			for (int j = 0; j < SIZES[i]; j++) {
-				arr[j] = j;
-			}
-
-			shuffle(arr, arr + SIZES[i], rand);
-
-			double start = duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
-
-			sorter.mergeSort(arr, SIZES[i]);
-
-			double end = duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
-
-			double elapsed = end - start;
-			trials[trial] = elapsed;
-
-			delete[] arr;
-		}
-
-		cout << averageTimes(trials, 5) << "ns" << endl;
+		cout << SIZES[i] << "\t\t" << benchmarker.benchmark([&sorter](int* arr, int size) { sorter.mergeSort(arr, size); }, SIZES[i], DataArrangement::RANDOM)
+			 << "\t\t" << benchmarker.benchmark([&sorter](int* arr, int size) { sorter.quickSort(arr, size); }, SIZES[i], DataArrangement::RANDOM) << "\t\t"
+			 << benchmarker.benchmark([&sorter](int* arr, int size) { sorter.heapSort(arr, size); }, SIZES[i], DataArrangement::RANDOM) << "\t\t"
+			 << benchmarker.benchmark([&sorter](int* arr, int size) { sorter.mergeInsertionSort(arr, size); }, SIZES[i], DataArrangement::RANDOM) << "\t\t"
+			 << endl;
 	}
 
-	cout << endl << "Reverse Order:" << endl;
+	cout << endl << "Reverse Order:" << endl << "Size\t\tMerge Sort\t\tQuick Sort\t\tHeap Sort\t\tMerge-Insertion Sort" << endl;
 
 	for (int i = 0; i < NUM_SIZES; i++) {
-		cout << SIZES[i] << " elements: ";
-
-		double trials[5] = {0};
-
-		for (int trial = 0; trial < 5; trial++) {
-			int* arr = new int[SIZES[i]];
-
-			for (int j = 0; j < SIZES[i]; j++) {
-				arr[j] = SIZES[i] - j;
-			}
-
-			double start = duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
-
-			sorter.mergeSort(arr, SIZES[i]);
-
-			double end = duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
-
-			double elapsed = end - start;
-			trials[trial] = elapsed;
-
-			delete[] arr;
-		}
-
-		cout << averageTimes(trials, 5) << "ns" << endl;
+		cout << SIZES[i] << "\t\t"
+			 << benchmarker.benchmark([&sorter](int* arr, int size) { sorter.mergeSort(arr, size); }, SIZES[i], DataArrangement::REVERSE) << "\t\t"
+			 << benchmarker.benchmark([&sorter](int* arr, int size) { sorter.quickSort(arr, size); }, SIZES[i], DataArrangement::REVERSE) << "\t\t"
+			 << benchmarker.benchmark([&sorter](int* arr, int size) { sorter.heapSort(arr, size); }, SIZES[i], DataArrangement::REVERSE) << "\t\t"
+			 << benchmarker.benchmark([&sorter](int* arr, int size) { sorter.mergeInsertionSort(arr, size); }, SIZES[i], DataArrangement::REVERSE) << "\t\t"
+			 << endl;
 	}
 
-	cout << endl << "Almost Sorted:" << endl;
+	cout << endl << "Almost Sorted:" << endl << "Size\t\tMerge Sort\t\tQuick Sort\t\tHeap Sort\t\tMerge-Insertion Sort" << endl;
 
 	for (int i = 0; i < NUM_SIZES; i++) {
-		cout << SIZES[i] << " elements: ";
-
-		double trials[5] = {0};
-
-		for (int trial = 0; trial < 5; trial++) {
-			int* arr = new int[SIZES[i]];
-
-			// Perform random swaps for 10% of the array
-			for (int j = 0; j < SIZES[i] / 10; j++) {
-				int a = rand() % SIZES[i], b = rand() % SIZES[i];
-
-				int temp = arr[a];
-				arr[a] = arr[b];
-				arr[b] = temp;
-			}
-
-			double start = duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
-
-			sorter.mergeSort(arr, SIZES[i]);
-
-			double end = duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
-
-			double elapsed = end - start;
-			trials[trial] = elapsed;
-
-			delete[] arr;
-		}
-
-		cout << averageTimes(trials, 5) << "ns" << endl;
+		cout << SIZES[i] << "\t\t"
+			 << benchmarker.benchmark([&sorter](int* arr, int size) { sorter.mergeSort(arr, size); }, SIZES[i], DataArrangement::ALMOST_SORTED) << "\t\t"
+			 << benchmarker.benchmark([&sorter](int* arr, int size) { sorter.quickSort(arr, size); }, SIZES[i], DataArrangement::ALMOST_SORTED) << "\t\t"
+			 << benchmarker.benchmark([&sorter](int* arr, int size) { sorter.heapSort(arr, size); }, SIZES[i], DataArrangement::ALMOST_SORTED) << "\t\t"
+			 << benchmarker.benchmark([&sorter](int* arr, int size) { sorter.mergeInsertionSort(arr, size); }, SIZES[i], DataArrangement::ALMOST_SORTED)
+			 << "\t\t" << endl;
 	}
 
 	return 0;

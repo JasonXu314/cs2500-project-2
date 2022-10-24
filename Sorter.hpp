@@ -45,7 +45,7 @@ void Sorter<T>::mergeInsertionSort(T* arr, int size) const {
 		return;
 	}
 
-	if (size <= 320) {
+	if (size <= 360) {
 		insertionSort(arr, size);
 		return;
 	}
