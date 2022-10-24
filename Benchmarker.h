@@ -1,6 +1,7 @@
 #ifndef BENCHMARKER_H
 #define BENCHMARKER_H
 
+#include <algorithm>
 #include <chrono>
 #include <ctime>
 #include <functional>
