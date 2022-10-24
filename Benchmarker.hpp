@@ -1,4 +1,5 @@
 using namespace std;
+using namespace chrono;
 
 template <typename T>
 Benchmarker<T>::Benchmarker(function<void(T*, int)> generateData) : _data(nullptr), _generateData(generateData) {
@@ -7,7 +8,7 @@ Benchmarker<T>::Benchmarker(function<void(T*, int)> generateData) : _data(nullpt
 
 template <typename T>
 double Benchmarker<T>::benchmark(std::function<void(T*, int)> fn, int size, DataArrangement dataType) {
-	int times[5] = {0};
+	double times[5] = {0};
 
 	for (int i = 0; i < 5; i++) {
 		_data = new T[size];
@@ -24,6 +25,8 @@ double Benchmarker<T>::benchmark(std::function<void(T*, int)> fn, int size, Data
 
 		delete[] _data;
 	}
+
+	_data = nullptr;
 
 	return averageTimes(times, 5);
 }
@@ -48,9 +51,9 @@ void Benchmarker<T>::_setupData(int size, DataArrangement dataType) {
 			for (int j = 0; j < size / 10; j++) {
 				int a = _rand() % size, b = _rand() % size;
 
-				int temp = arr[a];
-				arr[a] = arr[b];
-				arr[b] = temp;
+				int temp = _data[a];
+				_data[a] = _data[b];
+				_data[b] = temp;
 			}
 			break;
 		default:
@@ -61,5 +64,7 @@ void Benchmarker<T>::_setupData(int size, DataArrangement dataType) {
 
 template <typename T>
 Benchmarker<T>::~Benchmarker() {
-	delete[] _data;
+	if (_data != nullptr) {
+		delete[] _data;
+	}
 }

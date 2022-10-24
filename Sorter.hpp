@@ -1,5 +1,5 @@
 template <class T>
-void Sorter<T>::insertionSort(T* arr, int size) {
+void Sorter<T>::insertionSort(T* arr, int size) const {
 	for (int j = 1; j < size; j++) {
 		T elem = arr[j];
 		int i = j - 1;
@@ -13,7 +13,7 @@ void Sorter<T>::insertionSort(T* arr, int size) {
 }
 
 template <class T>
-void Sorter<T>::mergeSort(T* arr, int size) {
+void Sorter<T>::mergeSort(T* arr, int size) const {
 	if (size <= 1) {
 		return;
 	}
@@ -40,7 +40,7 @@ void Sorter<T>::mergeSort(T* arr, int size) {
 }
 
 template <class T>
-void Sorter<T>::mergeInsertionSort(T* arr, int size) {
+void Sorter<T>::mergeInsertionSort(T* arr, int size) const {
 	if (size <= 1) {
 		return;
 	}
@@ -72,7 +72,7 @@ void Sorter<T>::mergeInsertionSort(T* arr, int size) {
 }
 
 template <class T>
-void Sorter<T>::_merge(T* a, T* b, int aLen, int bLen, T* dest) {
+void Sorter<T>::_merge(T* a, T* b, int aLen, int bLen, T* dest) const {
 	int aIndex = 0, bIndex = 0;
 
 	for (int i = 0; i < aLen + bLen; i++) {
@@ -89,12 +89,12 @@ void Sorter<T>::_merge(T* a, T* b, int aLen, int bLen, T* dest) {
 }
 
 template <class T>
-void Sorter<T>::quickSort(T* arr, int size) {
+void Sorter<T>::quickSort(T* arr, int size) const {
 	_quickSort(arr, 0, size - 1);
 }
 
 template <class T>
-void Sorter<T>::_quickSort(T* arr, int low, int high) {
+void Sorter<T>::_quickSort(T* arr, int low, int high) const {
 	if (low >= 0 && high >= 0 && low < high) {
 		int pivot = _partition(arr, low, high);
 
@@ -104,7 +104,7 @@ void Sorter<T>::_quickSort(T* arr, int low, int high) {
 }
 
 template <class T>
-int Sorter<T>::_partition(T* arr, int low, int high) {
+int Sorter<T>::_partition(T* arr, int low, int high) const {
 	T pivot = arr[static_cast<int>(floor((high + low) / 2))];
 	int i = low - 1, j = high + 1;
 
@@ -127,7 +127,7 @@ int Sorter<T>::_partition(T* arr, int low, int high) {
 }
 
 template <class T>
-void Sorter<T>::heapSort(T* arr, int size) {
+void Sorter<T>::heapSort(T* arr, int size) const {
 	_heapify(arr, size);
 
 	int end = size - 1;
@@ -144,7 +144,7 @@ void Sorter<T>::heapSort(T* arr, int size) {
 }
 
 template <class T>
-void Sorter<T>::_heapify(T* arr, int size) {
+void Sorter<T>::_heapify(T* arr, int size) const {
 	int start = floor((size - 2) / 2);	// the parent of the last element (aka the last node on the second-to-lowest layer)
 
 	while (start >= 0) {
@@ -154,7 +154,7 @@ void Sorter<T>::_heapify(T* arr, int size) {
 }
 
 template <class T>
-void Sorter<T>::_siftDown(T* arr, int start, int end) {
+void Sorter<T>::_siftDown(T* arr, int start, int end) const {
 	int root = start;
 
 	while (root * 2 <= end) {
