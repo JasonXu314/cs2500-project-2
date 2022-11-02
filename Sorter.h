@@ -29,6 +29,10 @@ private:
 
 	void _quickSort(T* arr, int low, int high) const;
 
+	// Partitions the array on the interval [low, high] around the pivot whose index is returned (using Hoare's partition scheme, because that's what I
+	// learned in high school)
+	// Pre: arr is an array, in which low and high are valid indices
+	// Post: partitions the array according to Hoare's partition scheme and returns the pivot index
 	int _partition(T* arr, int low, int high) const;
 
 	void _heapify(T* arr, int size) const;

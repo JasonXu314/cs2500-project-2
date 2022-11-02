@@ -1,6 +1,16 @@
 template <class T>
 void Sorter<T>::insertionSort(T* arr, int size) const {
+	// Outer loop invariant is that the array is sorted up to the current index
+
+#if DEBUG == 1
+	assert(sorted(arr, 1));	 // 1 is the initial value of j
+#endif
+
 	for (int j = 1; j < size; j++) {
+#if DEBUG == 1
+		assert(sorted(arr, j));	 // the array is sorted up to (but not including) j
+#endif
+
 		T elem = arr[j];
 		int i = j - 1;
 
@@ -9,7 +19,15 @@ void Sorter<T>::insertionSort(T* arr, int size) const {
 		}
 
 		arr[i + 1] = elem;
+
+#if DEBUG == 1
+		assert(sorted(arr, j));	 // the array is still sorted up to j
+#endif
 	}
+
+#if DEBUG == 1
+	assert(sorted(arr, size));	// the array is now fully sorted (array is sorted up to size)
+#endif
 }
 
 template <class T>
