@@ -1,3 +1,5 @@
+#define DEBUG 0
+
 #include <algorithm>
 #include <chrono>
 #include <ctime>

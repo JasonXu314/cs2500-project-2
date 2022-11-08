@@ -33,6 +33,9 @@ void Sorter<T>::insertionSort(T* arr, int size) const {
 template <class T>
 void Sorter<T>::mergeSort(T* arr, int size) const {
 	if (size <= 1) {
+#if DEBUG == 1
+		assert(sorted(arr, size));	// Base Case: the array is trivially sorted if it has 1 element, or vacuously sorted if it has 0 elements
+#endif
 		return;
 	}
 
@@ -52,6 +55,9 @@ void Sorter<T>::mergeSort(T* arr, int size) const {
 	mergeSort(b, secondHalfLength);
 
 	_merge(a, b, firstHalfLength, secondHalfLength, arr);
+#if DEBUG == 1
+	assert(sorted(arr, size));	// Post-recombination: The array is now sorted
+#endif
 
 	delete[] a;
 	delete[] b;
@@ -60,11 +66,17 @@ void Sorter<T>::mergeSort(T* arr, int size) const {
 template <class T>
 void Sorter<T>::mergeInsertionSort(T* arr, int size) const {
 	if (size <= 1) {
+#if DEBUG == 1
+		assert(sorted(arr, size));	// Base Case: the array is trivially sorted if it has 1 element, or vacuously sorted if it has 0 elements
+#endif
 		return;
 	}
 
 	if (size <= 360) {
 		insertionSort(arr, size);
+#if DEBUG == 1
+		assert(sorted(arr, size));	// We can assume insertion sort is implemented correctly, so this becomes another Base Case
+#endif
 		return;
 	}
 
@@ -84,6 +96,9 @@ void Sorter<T>::mergeInsertionSort(T* arr, int size) const {
 	mergeSort(b, secondHalfLength);
 
 	_merge(a, b, firstHalfLength, secondHalfLength, arr);
+#if DEBUG == 1
+	assert(sorted(arr, size));	// Post-recombination: The array is now sorted
+#endif
 
 	delete[] a;
 	delete[] b;
@@ -118,12 +133,18 @@ void Sorter<T>::_quickSort(T* arr, int low, int high) const {
 
 		_quickSort(arr, low, pivot);
 		_quickSort(arr, pivot + 1, high);
+
+#if DEBUG == 1
+		assert(sorted(arr, low, high + 1));	 // Post-recombination: The array is now sorted
+#endif
+	} else {
+		// Base Case: The array is trivially sorted if low and high have crossed, since there is no array to sort.
 	}
 }
 
 template <class T>
 int Sorter<T>::_partition(T* arr, int low, int high) const {
-	T pivot = arr[static_cast<int>(floor((high + low) / 2))];
+	T pivot = arr[(high + low) / 2];
 	int i = low - 1, j = high + 1;
 
 	while (true) {
@@ -150,7 +171,15 @@ void Sorter<T>::heapSort(T* arr, int size) const {
 
 	int end = size - 1;
 
+#if DEBUG == 1
+	assert(sorted(arr, end, size));	 // Setup: the last 0 elements of the array are sorted (since end is size - 1)
+#endif
+
 	while (end > 0) {
+#if DEBUG == 1
+		assert(sorted(arr, end, size));	 // Initialization: the last (size - end - 1) elements of the array are sorted
+#endif
+
 		T temp = arr[end];
 		arr[end] = arr[0];
 		arr[0] = temp;
@@ -158,7 +187,16 @@ void Sorter<T>::heapSort(T* arr, int size) const {
 		end--;
 
 		_siftDown(arr, 0, end);
+
+#if DEBUG == 1
+		assert(sorted(arr, end, size));	 // Maintenance: the last (size - end - 1) elements of the array are still sorted
+#endif
 	}
+
+#if DEBUG == 1
+	assert(sorted(arr, 0, size));  // Termination: the entire array is now sorted, since end is now 0 (if the last size - 1 elements are sorted, the
+								   // one remaining element is necessarily sorted by pidgeonhole principle)
+#endif
 }
 
 template <class T>
